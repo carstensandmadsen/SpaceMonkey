@@ -53,7 +53,6 @@
             this.il2Btn = new System.Windows.Forms.Button();
             this.warplanesWW1Btn = new System.Windows.Forms.Button();
             this.vtolvrBtn = new System.Windows.Forms.Button();
-            this.overloadButton = new System.Windows.Forms.Button();
             this.OpenMotionBtn = new System.Windows.Forms.Button();
             this.WRCGenBtn = new System.Windows.Forms.Button();
             this.tinyCombatArenaButton = new System.Windows.Forms.Button();
@@ -322,17 +321,7 @@
             this.vtolvrBtn.Text = "VTOL VR";
             this.vtolvrBtn.UseVisualStyleBackColor = true;
             this.vtolvrBtn.Click += new System.EventHandler(this.vtolvrBtn_Click);
-            // 
-            // overloadButton
-            // 
-            this.overloadButton.Location = new System.Drawing.Point(14, 319);
-            this.overloadButton.Margin = new System.Windows.Forms.Padding(2);
-            this.overloadButton.Name = "overloadButton";
-            this.overloadButton.Size = new System.Drawing.Size(148, 46);
-            this.overloadButton.TabIndex = 40;
-            this.overloadButton.Text = "Overload";
-            this.overloadButton.UseVisualStyleBackColor = true;
-            this.overloadButton.Click += new System.EventHandler(this.overloadButton_Click);
+            
             // 
             // OpenMotionBtn
             // 
@@ -465,7 +454,6 @@
             this.Controls.Add(this.tinyCombatArenaButton);
             this.Controls.Add(this.WRCGenBtn);
             this.Controls.Add(this.OpenMotionBtn);
-            this.Controls.Add(this.overloadButton);
             this.Controls.Add(this.vtolvrBtn);
             this.Controls.Add(this.warplanesWW1Btn);
             this.Controls.Add(this.il2Btn);
@@ -491,7 +479,7 @@
             this.Controls.Add(this.configComboBox);
             this.Controls.Add(this.Filters);
             this.Controls.Add(this.Dirt5Button);
-            this.Icon = global::GenericTelemetryProvider.Properties.Resources.GTPIcon;
+            //this.Icon = global::GenericTelemetryProvider.Properties.Resources.GTPIcon;
             this.Name = "MainForm";
             this.Text = "SpaceMonkey";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -528,7 +516,6 @@
         private System.Windows.Forms.Button il2Btn;
         private System.Windows.Forms.Button warplanesWW1Btn;
         private System.Windows.Forms.Button vtolvrBtn;
-        private System.Windows.Forms.Button overloadButton;
         private System.Windows.Forms.Button OpenMotionBtn;
         private System.Windows.Forms.Button WRCGenBtn;
         private System.Windows.Forms.Button tinyCombatArenaButton;

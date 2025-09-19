@@ -1,0 +1,8 @@
+packages/
+bin/
+obj/
+Releases/Working/SpaceMonkey/
+!CMCustomUDP/bin/Debug/
+!GTAVAPI/obj/Debug/
+!MonsterGamesAPI/bin/Debug/
+!OpenMotionAPI/obj/Debug/

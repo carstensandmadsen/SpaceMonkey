@@ -349,12 +349,13 @@ namespace GenericTelemetryProvider
             rawData.local_velocity_x = (float)rawData.local_velocity_x * ui.VelocityScaleFactor;
             rawData.local_velocity_y = (float)rawData.local_velocity_y * ui.VelocityScaleFactor;
             rawData.local_velocity_z = (float)rawData.local_velocity_z * ui.VelocityScaleFactor;
+            rawData.local_velocity_z = 5;
         }
 
         public override void SimulateEngine()
         {
             base.SimulateEngine();
-
+            rawData.gear = 4.0f;
 
         }
 

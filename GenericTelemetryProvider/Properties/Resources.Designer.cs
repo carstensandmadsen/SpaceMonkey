@@ -80,16 +80,7 @@ namespace GenericTelemetryProvider.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] OverloadTelemetry {
-            get {
-                object obj = ResourceManager.GetObject("OverloadTelemetry", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
+  
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>

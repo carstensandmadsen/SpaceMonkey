@@ -37,7 +37,6 @@ namespace GenericTelemetryProvider
         IL2UI il2UI;
         WarplanesWW1UI warplanesWW1UI;
         VTOLVRUI vtolVRUI;
-        OverloadUI overloadUI;
         OpenMotionUI openMotionUI;
         WRCGenUI wrcGenUI;
         TinyCombatArenaUI tcaUI;
@@ -636,20 +635,6 @@ namespace GenericTelemetryProvider
             x.Start(vtolVRUI);
         }
 
-        private void overloadButton_Click(object sender, EventArgs e)
-        {
-            if (overloadUI != null && !overloadUI.IsDisposed)
-            {
-                overloadUI.Dispose();
-                overloadUI = null;
-            }
-
-            overloadUI = new OverloadUI();
-
-            Thread x = new Thread(new ParameterizedThreadStart((form) => ((OverloadUI)form).ShowDialog()));
-            x.IsBackground = true;
-            x.Start(overloadUI);
-        }
 
         private void openMotionBtn_Click(object sender, EventArgs e)
         {

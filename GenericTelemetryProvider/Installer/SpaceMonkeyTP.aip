@@ -72,7 +72,6 @@
     <ROW Component="MonsterGamesTelemetry.dll" ComponentId="{5F1F1B8D-B777-4317-9556-79D7E0E3D595}" Directory_="MonsterGames_Dir" Attributes="0" KeyPath="MonsterGamesTelemetry.dll"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{CB19911C-5F6C-41F5-8A69-3B46D590C5F9}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="OpenMotionAPI.dll" ComponentId="{6A246293-D2DD-4936-967D-281001EAD152}" Directory_="APPDIR" Attributes="0" KeyPath="OpenMotionAPI.dll"/>
-    <ROW Component="OverloadTelemetry.dll" ComponentId="{5C5EC446-D68A-479F-9CCC-3A9A92179A7F}" Directory_="APPDIR" Attributes="0" KeyPath="OverloadTelemetry.dll"/>
     <ROW Component="ProductInformation" ComponentId="{B3C5559E-115B-4C83-9E62-C09C2E862C7E}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProductName" ComponentId="{8312928D-E604-40AD-818E-D1B1941773C0}" Directory_="APPDIR" Attributes="260" KeyPath="ProductName"/>
     <ROW Component="RBRConfig.txt" ComponentId="{3E78065A-3C1B-434F-9128-8C313FDFD44D}" Directory_="RBR_Dir" Attributes="0" KeyPath="RBRConfig.txt_1" Type="0"/>
@@ -221,7 +220,6 @@
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\Release\Newtonsoft.Json.dll" SelfReg="false"/>
     <ROW File="Newtonsoft.Json.xml" Component_="gtp.txt" FileName="NEWTON~1.XML|Newtonsoft.Json.xml" Attributes="0" SourcePath="..\Release\Newtonsoft.Json.xml" SelfReg="false"/>
     <ROW File="OpenMotionAPI.dll" Component_="OpenMotionAPI.dll" FileName="OPENMO~1.DLL|OpenMotionAPI.dll" Attributes="0" SourcePath="..\Release\OpenMotionAPI.dll" SelfReg="false"/>
-    <ROW File="OverloadTelemetry.dll" Component_="OverloadTelemetry.dll" FileName="OVERLO~1.DLL|OverloadTelemetry.dll" Attributes="0" SourcePath="..\Release\OverloadTelemetry.dll" SelfReg="false"/>
     <ROW File="Dakar2Mod_0.2.zip" Component_="Dakar2Mod_0.2.zip" FileName="DAKAR2~1.ZIP|Dakar2Mod_0.2.zip" Attributes="0" SourcePath="..\..\Dakar2Mod\Release\0.2\Dakar2Mod_0.2.zip" SelfReg="false"/>
     <ROW File="MW5Mercs_0.3.zip" Component_="MW5Mercs_0.3.zip" FileName="MW5MER~1.ZIP|MW5Mercs_0.3.zip" Attributes="0" SourcePath="..\..\MW5MercsMod\Release\0.3\MW5Mercs_0.3.zip" SelfReg="false"/>
     <ROW File="TrailOut_0.3.zip" Component_="TrailOut_0.3.zip" FileName="TRAILO~1.ZIP|TrailOut_0.3.zip" Attributes="0" SourcePath="..\..\TrailOutMod\Release\0.3\TrailOut_0.3.zip" SelfReg="false"/>
@@ -340,16 +338,12 @@
     <ROW Feature_="MainFeature" Component_="MonsterGamesAPI.dll"/>
     <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="OpenMotionAPI.dll"/>
-    <ROW Feature_="MainFeature" Component_="OverloadTelemetry.dll"/>
     <ROW Feature_="MainFeature" Component_="Dakar2Mod_0.2.zip"/>
     <ROW Feature_="MainFeature" Component_="MW5Mercs_0.3.zip"/>
     <ROW Feature_="MainFeature" Component_="TrailOut_0.3.zip"/>
     <ROW Feature_="MainFeature" Component_="ProductName"/>
     <ROW Feature_="MainFeature" Component_="Manufacturer"/>
     <ROW Feature_="MainFeature" Component_="Software"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="GTPIcon.exe" SourcePath="..\GTPIcon.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>

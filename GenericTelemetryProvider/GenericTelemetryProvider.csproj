@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +41,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Resources.Extensions">
+      <HintPath>.\packages\System.Resources.Extensions.7.0.0\lib\net462\System.Resources.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\GTPSimfeedback\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -166,13 +170,6 @@
       <DependentUpon>KalmanVelocityFilterControl.cs</DependentUpon>
     </Compile>
     <Compile Include="KalmanVelocityNoiseFilter.cs" />
-    <Compile Include="OverloadTelemetryProvider.cs" />
-    <Compile Include="OverloadUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OverloadUI.Designer.cs">
-      <DependentUpon>OverloadUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="VTOLVRTelemetryProvider.cs" />
     <Compile Include="WarPlanesWW1TelemetryProvider.cs" />
@@ -374,9 +371,6 @@
     <EmbeddedResource Include="KalmanVelocityFilterControl.resx">
       <DependentUpon>KalmanVelocityFilterControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OverloadUI.resx">
-      <DependentUpon>OverloadUI.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="VTOLVRUI.resx">
       <DependentUpon>VTOLVRUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -478,10 +472,6 @@
       <Project>{9d4c7e8d-6798-4bf5-8bc4-480fdf3f8872}</Project>
       <Name>OpenMotionAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OverloadTelemetry\OverloadTelemetry.csproj">
-      <Project>{d113346d-947f-4f82-8014-e63e863308d1}</Project>
-      <Name>OverloadTelemetry</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SMHaptics\SMHaptics.csproj">
       <Project>{19b64a51-6be5-45c4-90e8-f31a1ada6be0}</Project>
       <Name>SMHaptics</Name>
@@ -504,13 +494,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GTPIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\MonsterGamesTelemetry.dll" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\OverloadTelemetry.dll" />
     <None Include="Resources\TCATelemetry.dll" />
     <Content Include="Resources\VTOLVRTelemetry.dll" />
     <Content Include="Resources\WarplanesWW1Telemetry.dll" />

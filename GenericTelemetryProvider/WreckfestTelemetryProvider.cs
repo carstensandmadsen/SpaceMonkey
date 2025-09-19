@@ -61,6 +61,8 @@ namespace GenericTelemetryProvider
             string scanString = "carRootNode" + vehicleString;
             scan.StartScanForString(scanString, 1);
 
+            //StartScanForByteArray
+
         }
 
         void ScanComplete()
@@ -108,8 +110,9 @@ namespace GenericTelemetryProvider
                         }
 
                         //sleep until the end of the frame
-                        if(different)
+                        if (different)
                             Thread.Sleep(1);
+
 
                     } while (!different);
 
@@ -161,6 +164,13 @@ namespace GenericTelemetryProvider
             SendFilteredData();
 
             return true;
+        }
+
+        public override void SimulateEngine()
+        {
+            base.SimulateEngine();
+            rawData.gear = 5.0f;
+            rawData.max_gears = 14.0f;
         }
 
         void scan_ScanProgressChanged(object sender, ScanProgressChangedEventArgs e)

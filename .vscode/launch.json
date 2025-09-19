@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Framework Launch (SpaceMonkeyTP)",
+      "type": "clr",
+      "request": "launch",
+      "program": "${workspaceFolder}/SpaceMonkeyTP/bin/Debug/SpaceMonkeyStart.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/SpaceMonkeyTP",
+      "stopAtEntry": false
+    }
+  ]
+}
