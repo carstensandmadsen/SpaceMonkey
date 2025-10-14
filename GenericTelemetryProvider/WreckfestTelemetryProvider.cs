@@ -18,11 +18,15 @@ namespace GenericTelemetryProvider
     class WreckfestTelemetryProvider : GenericProviderBase
     {
         Int64 memoryAddressMatrix;
+        Int64 memoryAddressEngineData;
         Int64 memoryAddressGear;
         Int64 memoryAddressRpm;
         Int64 memoryAddressClutch;
-        sbyte gear = 0;
+        int gear = 0;
+        int gearMax = 1;
         float rpm = 0.0f;
+        float rpmMin = 9999f;
+        float rpmMax = 0.0f;
         float clutch = 0.0f;
         Thread t;
         Process mainProcess = null;
@@ -35,6 +39,11 @@ namespace GenericTelemetryProvider
         public override void Run()
         {
             base.Run();
+
+            //reset values
+            gearMax = 1;
+            rpmMin = 9999f;
+            rpmMax = 0.0f;
 
 
             Process[] processes = Process.GetProcesses();
@@ -58,26 +67,26 @@ namespace GenericTelemetryProvider
             lStart -= 1000000;//skip a meg back
             if (lStart < 0) lStart = 0;
 
+            //scan for carRootNode
             RegularMemoryScan scan = new RegularMemoryScan(mainProcess, lStart, 140737488355327); //32gig            scan.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
             scan.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
-            scan.ScanCompleted += new RegularMemoryScan.ScanCompletedEventHandler(scan_ScanCompleted);;
+            scan.ScanCompleted += new RegularMemoryScan.ScanCompletedEventHandler(scan_ScanCompleted); ;
             scan.ScanCanceled += new RegularMemoryScan.ScanCanceledEventHandler(scan_ScanCanceled);
             string scanString = "carRootNode" + vehicleString;
             scan.StartScanForString(scanString, 1);
 
-
-            RegularMemoryScan scanGear = new RegularMemoryScan(mainProcess, lStart, 140737488355327); //32gig            scan.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
-            scanGear.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
-            scanGear.ScanCompleted += new RegularMemoryScan.ScanCompletedEventHandler(scan_ScanCompletedGear);
-            scanGear.ScanCanceled += new RegularMemoryScan.ScanCanceledEventHandler(scan_ScanCanceled);
-            byte[] scanBytes = new byte[] {
-                0xE1, 0xFA, 0x02, 0x44,
-                0x00, 0x00, 0x00, 0x3E,
-                0x00, 0x00, 0x00, 0x00
+            //scan for engine data
+            RegularMemoryScan scanForEngineData = new RegularMemoryScan(mainProcess, 0x10000000000, 0x40000000000); //32gig            scan.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
+            scanForEngineData.ScanProgressChanged += new RegularMemoryScan.ScanProgressedEventHandler(scan_ScanProgressChanged);
+            scanForEngineData.ScanCompleted += new RegularMemoryScan.ScanCompletedEventHandler(scan_ScanCompletedEngineData);
+            scanForEngineData.ScanCanceled += new RegularMemoryScan.ScanCanceledEventHandler(scan_ScanCanceled);
+            byte[] scanBytes = new byte[] { //"default" followed by 25 zeroes = 64 65 66 61 75 6C 74 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                0x64, 0x65, 0x66, 0x61, 0x75, 0x6C, 0x74, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
             };
-            scanGear.StartScanForByteArray(scanBytes, 1);
-            
-
+            scanForEngineData.StartScanForByteArray(scanBytes, 1);
         }
 
         void ScanComplete()
@@ -89,8 +98,8 @@ namespace GenericTelemetryProvider
             UInt64 readSizeMatrix = 4 * 4 * 4;
             byte[] readBufferMatrix = new byte[readSizeMatrix];
             byte[] lastReadBufferMatrix = new byte[readSizeMatrix];
-            
-            UInt64 readSizeGear = 1;
+
+            UInt64 readSizeGear = 4;
             byte[] readBufferGear = new byte[readSizeGear];
             byte[] lastReadBufferGear = new byte[readSizeGear];
 
@@ -187,20 +196,27 @@ namespace GenericTelemetryProvider
                                 , matrixFloats[12], matrixFloats[13], matrixFloats[14], matrixFloats[15]);
 
                     // Get gear value
-                    byte[] gearBytes = new byte[1];
-                    Buffer.BlockCopy(readBufferGear, 0, gearBytes, 0, readBufferGear.Length);
-                    gear = (sbyte)gearBytes[0];
+                    int[] gearInts = new int[1];
+                    Buffer.BlockCopy(readBufferGear, 0, gearInts, 0, readBufferGear.Length);
+                    gear = gearInts[0];
+                    if (gear < -10 || gear > 100) gear = 0;
+                    if (gear > gearMax) gearMax = gear;
+
                     // Get rpm value
                     float[] rpmFloats = new float[1];
                     Buffer.BlockCopy(readBufferRpm, 0, rpmFloats, 0, readBufferRpm.Length);
                     rpm = rpmFloats[0];
+                    if (rpm < 0.0f || rpm > 20000.0f) rpm = 0.0f;
+                    if (rpm < rpmMin) rpmMin = rpm;
+                    if (rpm > rpmMax) rpmMax = rpm;
+
                     // Get clutch value
                     float[] clutchFloats = new float[1];
                     Buffer.BlockCopy(readBufferClutch, 0, clutchFloats, 0, readBufferClutch.Length);
                     clutch = clutchFloats[0];
+                    if (clutch < 0.0f || clutch > 1.0f) clutch = 0.0f;
 
                     ProcessTransform(newTransform, frameRateSecs);
-
                 }
                 catch (Exception e)
                 {
@@ -232,12 +248,11 @@ namespace GenericTelemetryProvider
         {
             base.SimulateEngine();
 
-            rawData.gear = gear; //2.0f;//gear[1];
-            rawData.max_gears = 6.0f;
+            rawData.gear = gear;
+            rawData.max_gears = gearMax;
 
-            rawData.idle_rpm = 1100.0f;
-            rawData.max_rpm = 7200.0f;
-            //rawData.engine_rate = (rpm - 1100) / (7200 - 1100);
+            rawData.idle_rpm = rpmMin;
+            rawData.max_rpm = rpmMax;
 
             rawData.clutch_input = clutch;
         }
@@ -260,27 +275,27 @@ namespace GenericTelemetryProvider
             ui.InitButtonStatusChanged(true);
         }
 
-        void scan_ScanCompletedGear(object sender, ScanCompletedEventArgs e)
+        void scan_ScanCompletedEngineData(object sender, ScanCompletedEventArgs e)
         {
             ui.InitButtonStatusChanged(true);
 
             if (e.MemoryAddresses == null || e.MemoryAddresses.Length == 0)
             {
+                Utils.DebugLog("Wreckfest - Failed to find EngineData pattern");
                 ui.StatusTextChanged("Failed2!");
-
                 return;
             }
-            Utils.DebugLog("Wreckfest - Found gear, rpm, clutch pattern at: " + e.MemoryAddresses[0].ToString("X"));
+            Utils.DebugLog("Wreckfest - Found EngineData pattern at: " + e.MemoryAddresses[0].ToString("X"));
 
-            //            memoryAddress = e.MemoryAddresses[0] - ((4 * 4 * 4) + 4); //offset backwards from found address to start of matrix
-            //            memoryAddress = e.MemoryAddresses[0] - ((4 * 4 * 4) + 8); //offset backwards from found address to start of matrix
-            memoryAddressGear = e.MemoryAddresses[0] + 0x1C;// (((4 * 4 * 4) * 2) + 8); //offset backwards from found address to start of matrix
+            memoryAddressEngineData = e.MemoryAddresses[0] - 0x70; //offset backwards to start of EngineData struct
+            Utils.DebugLog("Wreckfest - Found engine data value at: " + memoryAddressEngineData.ToString("X"));
+            memoryAddressGear = memoryAddressEngineData + 0xE98; //offset forwards to gear value
             Utils.DebugLog("Wreckfest - Found gear value at: " + memoryAddressGear.ToString("X"));
-            memoryAddressRpm = e.MemoryAddresses[0] - 0x2DC;// (((4 * 4 * 4) * 2) + 8); //offset backwards from found address to start of matrix
+            memoryAddressRpm = memoryAddressEngineData + 0xB94; //offset forwards to rpm value
             Utils.DebugLog("Wreckfest - Found rpm value at: " + memoryAddressRpm.ToString("X"));
-            memoryAddressClutch = e.MemoryAddresses[0] + 0x0C;// (((4 * 4 * 4) * 2) + 8); //offset backwards from found address to start of matrix
+            memoryAddressClutch = memoryAddressEngineData + 0xE88; //offset forwards to clutch value
             Utils.DebugLog("Wreckfest - Found clutch value at: " + memoryAddressClutch.ToString("X"));
-            
+
             ui.StatusTextChanged("Success2");
 
             t = new Thread(ScanComplete);
@@ -294,20 +309,19 @@ namespace GenericTelemetryProvider
 
             if (e.MemoryAddresses == null || e.MemoryAddresses.Length == 0)
             {
+                Utils.DebugLog("Wreckfest - Failed to find Matrix pattern");
                 ui.StatusTextChanged("Failed1!");
-
                 return;
             }
+            Utils.DebugLog("Wreckfest - Found Matrix pattern at: " + e.MemoryAddresses[0].ToString("X"));
 
-            Utils.DebugLog("Wreckfest - Found matrix pattern at: " + e.MemoryAddresses[0].ToString("X"));
-            
             //            memoryAddress = e.MemoryAddresses[0] - ((4 * 4 * 4) + 4); //offset backwards from found address to start of matrix
             //            memoryAddress = e.MemoryAddresses[0] - ((4 * 4 * 4) + 8); //offset backwards from found address to start of matrix
             memoryAddressMatrix = e.MemoryAddresses[0] - (((4 * 4 * 4) * 2) + 8); //offset backwards from found address to start of matrix
             Utils.DebugLog("Wreckfest - Found matrix value at: " + memoryAddressMatrix.ToString("X"));
 
             ui.StatusTextChanged("Success1");
-/*
+            /*
             t = new Thread(ScanComplete);
             t.IsBackground = true;
             t.Start();
